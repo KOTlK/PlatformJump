@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class MovingPlatform : Platform
+public class MovingPlatform : PlatformModificator
 {
     private float _speed;
     private bool _movementOver;
@@ -13,15 +8,19 @@ public class MovingPlatform : Platform
     private Movement _movement;
     private const float _nearRange = 0.5f;
 
-    private void Start()
+    public MovingPlatform(Platform platform) : base(platform)
+    {
+    }
+
+    public override void Init()
     {
         _speed = UnityEngine.Random.Range(1f, 5f);
-        _movement = new Movement(transform, _speed);
+        _movement = new Movement(BindedPlatform.transform, _speed);
         _movementDestination = GetRandomDestination();
         _movementOver = false;
     }
 
-    private void FixedUpdate()
+    public override void OnFixedUpdate()
     {
         Move();
     }
@@ -46,13 +45,13 @@ public class MovingPlatform : Platform
     private Vector2 GetRandomDestination()
     {
         var x = UnityEngine.Random.Range(CameraBounds.MinBounds.x, CameraBounds.MaxBounds.x);
-        var y = transform.position.y;
+        var y = BindedPlatform.transform.position.y;
         return new Vector2(x, y);
     }
 
     private bool NearDestination()
     {
-        if((_movementDestination - (Vector2)transform.position).magnitude <= _nearRange)
+        if((_movementDestination - (Vector2)BindedPlatform.transform.position).magnitude <= _nearRange)
         {
             return true;
         } else
