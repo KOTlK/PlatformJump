@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MovingPlatform : PlatformModificator
+public class Moving : PlatformModificator
 {
     private float _speed;
     private bool _movementOver;
@@ -8,22 +8,25 @@ public class MovingPlatform : PlatformModificator
     private Movement _movement;
     private const float _nearRange = 0.5f;
 
-    public MovingPlatform(Platform platform) : base(platform)
+    public Moving(Platform platform) : base(platform)
     {
     }
 
     public override void Init()
     {
+        base.Init();
         _speed = UnityEngine.Random.Range(1f, 5f);
-        _movement = new Movement(BindedPlatform.transform, _speed);
+        _movement = new Movement(Platform.transform, _speed);
         _movementDestination = GetRandomDestination();
         _movementOver = false;
     }
 
-    public override void OnFixedUpdate()
+    public override void FixedUpdate()
     {
+        base.FixedUpdate();
         Move();
     }
+
 
     private void Move()
     {
@@ -45,20 +48,19 @@ public class MovingPlatform : PlatformModificator
     private Vector2 GetRandomDestination()
     {
         var x = UnityEngine.Random.Range(CameraBounds.MinBounds.x, CameraBounds.MaxBounds.x);
-        var y = BindedPlatform.transform.position.y;
+        var y = Platform.transform.position.y;
         return new Vector2(x, y);
     }
 
     private bool NearDestination()
     {
-        if((_movementDestination - (Vector2)BindedPlatform.transform.position).magnitude <= _nearRange)
+        if ((_movementDestination - (Vector2)Platform.transform.position).magnitude <= _nearRange)
         {
             return true;
-        } else
+        }
+        else
         {
             return false;
         }
     }
-
-    
 }

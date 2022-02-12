@@ -1,17 +1,11 @@
 ﻿public abstract class PlatformModificator
 {
-    protected Platform BindedPlatform;
-
+    protected Platform Platform;
     public PlatformModificator(Platform platform)
     {
-        BindedPlatform = platform;
+        Platform = platform;
     }
-
     public virtual void Init() { }
-
-    public virtual void OnUpdate() { }
-
-    public virtual void OnFixedUpdate() { }
-
-    public virtual void OnDestroy() { }
+    public virtual void FixedUpdate() { }
+    public virtual void Destroy() { }
 }
