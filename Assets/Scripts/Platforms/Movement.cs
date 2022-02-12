@@ -19,4 +19,13 @@ public class Movement
         _transform.position = prevPosition;
 
     }
+
+    public void MoveHorizontal(float direction)
+    {
+        Vector2 position = _transform.position;
+        var deltaX = position.x + (direction * _speed * Time.deltaTime);
+        position.x = deltaX;
+        _transform.position = position;
+    }
+
 }

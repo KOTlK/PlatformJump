@@ -41,4 +41,16 @@ public class Platform : MonoBehaviour
     {
         _modificator.Destroy();
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.TryGetComponent<Player>(out Player player))
+        {
+            if (player.Physics.Velocity.y <= 0)
+            {
+                PlayerStepped?.Invoke();
+                player.StepOnPlatform();
+            }
+        }
+    }
 }
