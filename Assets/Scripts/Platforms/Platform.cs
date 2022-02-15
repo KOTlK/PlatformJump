@@ -7,10 +7,14 @@ public class Platform : MonoBehaviour
 
     private PlatformModificator _modificator;
 
-    public void Init(PlatformModificator modificator)
+    public void Init()
+    {
+        _modificator.Init();
+    }
+
+    public void Modify(PlatformModificator modificator)
     {
         _modificator = modificator;
-        _modificator.Init();
     }
 
     public void StepOn()

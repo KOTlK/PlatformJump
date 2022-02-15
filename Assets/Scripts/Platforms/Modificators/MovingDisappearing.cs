@@ -2,9 +2,9 @@
 {
     private readonly StaticDisappearing _disappearing;
 
-    public MovingDisappearing(Platform platform) : base(platform)
+    public MovingDisappearing(Platform platform, PlatformDestroyer destroyer) : base(platform)
     {
-        _disappearing = new StaticDisappearing(platform);
+        _disappearing = new StaticDisappearing(platform, destroyer);
     }
 
     public override void Init()

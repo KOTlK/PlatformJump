@@ -1,7 +1,9 @@
 ﻿public class StaticDisappearing : PlatformModificator
 {
-    public StaticDisappearing(Platform platform) : base(platform)
+    private readonly PlatformDestroyer _destroyer;
+    public StaticDisappearing(Platform platform, PlatformDestroyer destroyer) : base(platform)
     {
+        _destroyer = destroyer;
     }
 
     public override void Init()
@@ -18,6 +20,6 @@
 
     private void DestroyPlatform()
     {
-        Platform.Destroy();
+        _destroyer.DestroyPlatform(Platform);
     }
 }
