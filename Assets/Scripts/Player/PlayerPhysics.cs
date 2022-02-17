@@ -1,40 +1,43 @@
 ﻿using UnityEngine;
-
-public struct PhysicsSettings
-{
-    public Vector2 Gravity { get; set; }
-}
+using System;
 
 public class PlayerPhysics
 {
-    private readonly PhysicsSettings _settings;
-    private readonly Transform _targetBody;
+    private readonly Rigidbody2D _playerBody;
 
-    private Vector2 _velocity;
 
-    public PlayerPhysics(PhysicsSettings settings, Transform target)
+    public PlayerPhysics(Rigidbody2D rigidbody)
     {
-        _settings = settings;
-        _targetBody = target;
+        _playerBody = rigidbody;
     }
 
-    public Vector2 Velocity => _velocity;
+    public Vector2 Velocity => _playerBody.velocity;
 
-    public void ApplyPhysics(float timeDelta)
+    public void SetVelocity(VelocityAxis axis, Vector2 velocity)
     {
-        _velocity += _settings.Gravity * timeDelta;
-        var position = (Vector2)_targetBody.position;
-        position += _velocity;
-        _targetBody.position = position;
+        var playerVelocity = _playerBody.velocity;
+        switch (axis)
+        {
+            case VelocityAxis.X:
+                playerVelocity.x = velocity.x;
+                _playerBody.velocity = playerVelocity;
+                return;
+            case VelocityAxis.Y:
+                playerVelocity.y = velocity.y;
+                _playerBody.velocity = playerVelocity;
+                return;
+            case VelocityAxis.Both:
+                _playerBody.velocity = velocity;
+                return;
+            default: throw new Exception($"Can't find axis {axis}");
+        }
     }
-
-    public void ApplyVelocityY(float amount)
-    {
-        var velocity = _velocity;
-        velocity.y = amount;
-        _velocity = velocity;
-    }
+}
 
 
-
+public enum VelocityAxis
+{
+    X,
+    Y,
+    Both,
 }

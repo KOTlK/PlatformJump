@@ -11,6 +11,7 @@ public class Movement
         _speed = speed;
     }
 
+
     public void MoveTo(Vector2 position)
     {
         Vector2 prevPosition = _transform.position;
@@ -20,12 +21,5 @@ public class Movement
 
     }
 
-    public void MoveHorizontal(float direction)
-    {
-        Vector2 position = _transform.position;
-        var deltaX = position.x + (direction * _speed * Time.deltaTime);
-        position.x = deltaX;
-        _transform.position = position;
-    }
 
 }
