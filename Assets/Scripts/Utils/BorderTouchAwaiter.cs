@@ -9,11 +9,11 @@ public class BorderTouchAwaiter : IBorderTouchAwaiter
 
     public void WaitTouch(Vector2 position)
     {
-        if (position.x >= CameraBounds.MaxBounds.x + BorderOffset)
+        if (position.x >= CameraBounds.Max.x + BorderOffset)
         {
             BorderTouched?.Invoke(BorderSide.Right);
         }
-        if (position.x <= CameraBounds.MinBounds.x - BorderOffset)
+        if (position.x <= CameraBounds.Min.x - BorderOffset)
         {
             BorderTouched?.Invoke(BorderSide.Left);
         }

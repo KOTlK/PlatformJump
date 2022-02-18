@@ -3,13 +3,14 @@ using UnityEngine;
 
 public static class CameraBounds
 {
-    public static Vector2 MaxBounds
+    private static Camera _camera = Camera.main;
+    public static Vector2 Max
     {
-        get { return Camera.main.GetMaxBounds();}
+        get { return _camera.GetMaxBounds();}
     }
 
-    public static Vector2 MinBounds
+    public static Vector2 Min
     {
-        get { return Camera.main.GetMinBounds();}
+        get { return _camera.GetMinBounds();}
     }
 }

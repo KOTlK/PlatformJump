@@ -15,13 +15,24 @@ public class PlatformLifeCycle
 
     private const float SpawnDistance = 5f;
 
-    public PlatformLifeCycle(Platform platformPrefab, Transform parent)
+    public PlatformLifeCycle(Platform platformPrefab, Transform parent, LowerBorder lowerBorder)
     {
         _spawner = new PlatformSpawner();
         _destroyer = new PlatformDestroyer();
-        _borderTouchAwaiter = new LowerBorderTouchAwaiter();
+        _borderTouchAwaiter = new LowerBorderTouchAwaiter(lowerBorder);
         _spawnedPlatforms = new List<Platform>();
         _platformFactory = new DefaultPlatformFactory(platformPrefab, parent);
+    }
+
+
+    public void Update()
+    {
+        _borderTouchAwaiter.FixedUpdate();
+    }
+
+    public void Destroy()
+    {
+        _borderTouchAwaiter.Destroy();
     }
 
     public void SpawnStartPlatforms(int amount)
@@ -36,7 +47,6 @@ public class PlatformLifeCycle
     {
         if (_isSpawning) return;
 
-        _spawner.PlatformSpawned += _borderTouchAwaiter.WaitTouch;
         _borderTouchAwaiter.BorderTouched += _destroyer.DestroyPlatform;
         _destroyer.PlatformDestroyed += delegate { SpawnRandomPlatform(); };
         _destroyer.PlatformDestroyed += RemoveFromList;
@@ -47,21 +57,12 @@ public class PlatformLifeCycle
     {
         if (_isSpawning == false) return;
 
-        _spawner.PlatformSpawned -= _borderTouchAwaiter.WaitTouch;
         _borderTouchAwaiter.BorderTouched -= _destroyer.DestroyPlatform;
         _destroyer.PlatformDestroyed -= delegate { SpawnRandomPlatform(); };
         _destroyer.PlatformDestroyed -= RemoveFromList;
         _isSpawning = false;
     }
 
-    
-    public void Update()
-    {
-        foreach (var platform in _spawnedPlatforms.ToArray())
-        {
-            _borderTouchAwaiter.WaitTouch(platform);
-        }
-    }
 
     private void RemoveFromList(Platform platform)
     {
@@ -74,7 +75,7 @@ public class PlatformLifeCycle
         var x = GetRandomXInScreenBorders();
         if (_previousPosition == Vector2.zero)
         {
-            var y = CameraBounds.MinBounds.y + 1f;
+            var y = CameraBounds.Min.y + 1f;
             var position = new Vector2(x, y);
             platform.transform.position = position;
             _previousPosition = position;
@@ -108,7 +109,7 @@ public class PlatformLifeCycle
 
     private float GetRandomXInScreenBorders()
     {
-        return UnityEngine.Random.Range(CameraBounds.MinBounds.x, CameraBounds.MaxBounds.x);
+        return UnityEngine.Random.Range(CameraBounds.Min.x, CameraBounds.Max.x);
     }
 
 }

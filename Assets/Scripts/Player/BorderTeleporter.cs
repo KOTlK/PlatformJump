@@ -42,9 +42,9 @@ public class BorderTeleporter
         switch (side)
         {
             case BorderSide.Left:
-                return CameraBounds.MaxBounds.x;
+                return CameraBounds.Max.x;
             case BorderSide.Right:
-                return CameraBounds.MinBounds.x;
+                return CameraBounds.Min.x;
             default: throw new Exception($"No data for side {side}");
         }
     }

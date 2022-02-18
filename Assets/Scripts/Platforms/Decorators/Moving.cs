@@ -48,7 +48,7 @@ public class Moving : PlatformDecorator
 
     private Vector2 GetRandomDestination()
     {
-        var x = UnityEngine.Random.Range(CameraBounds.MinBounds.x, CameraBounds.MaxBounds.x);
+        var x = UnityEngine.Random.Range(CameraBounds.Min.x, CameraBounds.Max.x);
         var y = Platform.transform.position.y;
         return new Vector2(x, y);
     }
