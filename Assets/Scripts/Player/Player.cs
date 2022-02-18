@@ -40,7 +40,6 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        UpdateVelocity();
         UpdateCollider();
     }
 
@@ -64,11 +63,6 @@ public class Player : MonoBehaviour
         _physics.SetVelocity(VelocityAxis.Y, _jumpForce);
     }
 
-    private void UpdateVelocity()
-    {
-        if (_physics.Velocity.y > 0) return;
-        _physics.SetVelocity(VelocityAxis.Y, _fallVelocity);
-    }
 
     private void UpdateCollider()
     {

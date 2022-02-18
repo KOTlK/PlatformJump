@@ -16,12 +16,12 @@ public class PlatformLifeCycle
 
     private const float SpawnDistance = 5f;
 
-    public PlatformLifeCycle(Platform platformPrefab, Transform parent, LowerBorder lowerBorder, PlatformSpawnChances chances)
+    public PlatformLifeCycle(Platform platformPrefab, Transform parent, LowerBorderTouchAwaiter lowerBorderTouchAwaiter, PlatformSpawnChances chances)
     {
         _spawnChances = chances;
         _spawner = new PlatformSpawner();
         _destroyer = new PlatformDestroyer();
-        _borderTouchAwaiter = new LowerBorderTouchAwaiter(lowerBorder);
+        _borderTouchAwaiter = lowerBorderTouchAwaiter;
         _spawnedPlatforms = new List<Platform>();
         _platformFactory = new DefaultPlatformFactory(platformPrefab, parent);
     }

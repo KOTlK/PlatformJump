@@ -14,10 +14,12 @@ public class Core : MonoBehaviour
 
     private PlatformLifeCycle _platformLifeCycle;
     private Camera _camera;
+    private LowerBorderTouchAwaiter _lowerBorderTouchAwaiter;
 
     private void Awake()
     {
-        _platformLifeCycle = new PlatformLifeCycle(_platformPrefab, _platformParent, _lowerBorder, _spawnChances);
+        _lowerBorderTouchAwaiter = new LowerBorderTouchAwaiter(_lowerBorder);
+        _platformLifeCycle = new PlatformLifeCycle(_platformPrefab, _platformParent, _lowerBorderTouchAwaiter, _spawnChances);
         _platformLifeCycle.StartSpawning();
         _platformLifeCycle.SpawnStartPlatforms(10);
         _camera = Camera.main;
