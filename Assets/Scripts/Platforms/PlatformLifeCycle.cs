@@ -9,14 +9,16 @@ public class PlatformLifeCycle
     private readonly LowerBorderTouchAwaiter _borderTouchAwaiter;
     private readonly List<Platform> _spawnedPlatforms;
     private readonly IPlatformFactory _platformFactory;
+    private readonly PlatformSpawnChances _spawnChances;
 
     private Vector2 _previousPosition;
     private bool _isSpawning;
 
     private const float SpawnDistance = 5f;
 
-    public PlatformLifeCycle(Platform platformPrefab, Transform parent, LowerBorder lowerBorder)
+    public PlatformLifeCycle(Platform platformPrefab, Transform parent, LowerBorder lowerBorder, PlatformSpawnChances chances)
     {
+        _spawnChances = chances;
         _spawner = new PlatformSpawner();
         _destroyer = new PlatformDestroyer();
         _borderTouchAwaiter = new LowerBorderTouchAwaiter(lowerBorder);
@@ -103,7 +105,7 @@ public class PlatformLifeCycle
         var random = UnityEngine.Random.Range(0, 100);
         PlatformType type = GetRandomType();
         if (random == 0) return GetRandomTypeUsingChances();
-        if (random <= PlatformSpawnChances.GetChances(type)) return type;
+        if (random <= _spawnChances.GetChance(type)) return type;
         return GetRandomTypeUsingChances();
     }
 

@@ -10,13 +10,14 @@ public class Core : MonoBehaviour
     [SerializeField] private Platform _platformPrefab;
     [SerializeField] private Transform _platformParent;
     [SerializeField] private LowerBorder _lowerBorder;
+    [SerializeField] private PlatformSpawnChances _spawnChances;
 
     private PlatformLifeCycle _platformLifeCycle;
     private Camera _camera;
 
     private void Awake()
     {
-        _platformLifeCycle = new PlatformLifeCycle(_platformPrefab, _platformParent, _lowerBorder);
+        _platformLifeCycle = new PlatformLifeCycle(_platformPrefab, _platformParent, _lowerBorder, _spawnChances);
         _platformLifeCycle.StartSpawning();
         _platformLifeCycle.SpawnStartPlatforms(10);
         _camera = Camera.main;
