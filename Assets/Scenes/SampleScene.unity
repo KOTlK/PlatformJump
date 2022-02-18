@@ -170,6 +170,7 @@ MonoBehaviour:
   _platformParent: {fileID: 511497139}
   _lowerBorder: {fileID: 743124213}
   _spawnChances: {fileID: 11400000, guid: 9a3db90586d74d942a17aa5cfb97b49e, type: 2}
+  _player: {fileID: 2048818445}
 --- !u!1 &511497138
 GameObject:
   m_ObjectHideFlags: 0

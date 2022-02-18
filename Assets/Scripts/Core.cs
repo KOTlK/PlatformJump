@@ -11,9 +11,11 @@ public class Core : MonoBehaviour
     [SerializeField] private Transform _platformParent;
     [SerializeField] private LowerBorder _lowerBorder;
     [SerializeField] private PlatformSpawnChances _spawnChances;
+    [SerializeField] private Player _player;
+
 
     private PlatformLifeCycle _platformLifeCycle;
-    private Camera _camera;
+    private GameCamera _gameCamera;
     private LowerBorderTouchAwaiter _lowerBorderTouchAwaiter;
 
     private void Awake()
@@ -22,7 +24,7 @@ public class Core : MonoBehaviour
         _platformLifeCycle = new PlatformLifeCycle(_platformPrefab, _platformParent, _lowerBorderTouchAwaiter, _spawnChances);
         _platformLifeCycle.StartSpawning();
         _platformLifeCycle.SpawnStartPlatforms(10);
-        _camera = Camera.main;
+        _gameCamera = new GameCamera(_player.transform);
     }
 
     private void OnDestroy()
@@ -34,17 +36,14 @@ public class Core : MonoBehaviour
 
     private void Update()
     {
-        var horizontal = Input.GetAxis("Horizontal");
-        var vertical = Input.GetAxis("Vertical");
-        MoveCamera(new Vector2(horizontal, vertical));
         _platformLifeCycle.Update();
     }
 
-    //Debug only
-    private void MoveCamera(Vector2 direction)
+    private void FixedUpdate()
     {
-        _camera.transform.position += (Vector3)direction * 5 * Time.deltaTime;
+        _gameCamera.FixedUpdate();
     }
+
 
 
 }
