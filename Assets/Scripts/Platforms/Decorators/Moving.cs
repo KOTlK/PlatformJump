@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Moving : PlatformModificator
+public class Moving : PlatformDecorator
 {
     private float _speed;
     private bool _movementOver;
@@ -14,7 +14,6 @@ public class Moving : PlatformModificator
 
     public override void Init()
     {
-        base.Init();
         _speed = UnityEngine.Random.Range(1f, 5f);
         _movement = new Movement(Platform.transform, _speed);
         _movementDestination = GetRandomDestination();
@@ -23,8 +22,8 @@ public class Moving : PlatformModificator
 
     public override void FixedUpdate()
     {
-        base.FixedUpdate();
         Move();
+        Decorator?.FixedUpdate();
     }
 
 
@@ -34,7 +33,9 @@ public class Moving : PlatformModificator
         {
             _movementDestination = GetRandomDestination();
         }
+
         _movement.MoveTo(_movementDestination);
+
         if (NearDestination())
         {
             _movementOver = true;

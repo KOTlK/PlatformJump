@@ -70,8 +70,7 @@ public class PlatformLifeCycle
 
     private void SpawnRandomPlatform()
     {
-        var platform = _spawner.Spawn(_platformFactory, GetRandomType(), _destroyer);
-
+        var platform = _spawner.Spawn(_platformFactory, GetRandomTypeUsingChances(), _destroyer);
         var x = GetRandomXInScreenBorders();
         if (_previousPosition == Vector2.zero)
         {
@@ -96,6 +95,15 @@ public class PlatformLifeCycle
         var amount = Enum.GetValues(typeof(PlatformType)).Length;
         var random = UnityEngine.Random.Range(0, amount);
         return (PlatformType)random;
+    }
+
+    private PlatformType GetRandomTypeUsingChances()
+    {
+        var random = UnityEngine.Random.Range(0, 100);
+        PlatformType type = GetRandomType();
+        if (random == 0) return GetRandomTypeUsingChances();
+        if (random <= PlatformSpawnChances.GetChances(type)) return type;
+        return GetRandomTypeUsingChances();
     }
 
     private float GetRandomXInScreenBorders()

@@ -1,7 +1,7 @@
 ﻿public enum PlatformType
 {
+    MovingDisappearing,
+    StaticDisappearing,
     Moving,
     Static,
-    StaticDisappearing,
-    MovingDisappearing,
 }

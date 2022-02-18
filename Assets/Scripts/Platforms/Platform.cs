@@ -5,16 +5,25 @@ public class Platform : MonoBehaviour
 {
     public event Action PlayerStepped;
 
-    private PlatformModificator _modificator;
+    private PlatformDecorator _decorator;
 
     public void Init()
     {
-        _modificator.Init();
+        _decorator?.Init();
     }
 
-    public void Modify(PlatformModificator modificator)
+    public Platform Decorate(PlatformDecorator modificator)
     {
-        _modificator = modificator;
+        if (_decorator == null)
+        {
+            _decorator = modificator;
+            return this;
+        } else
+        {
+            _decorator.Decorate(modificator);
+            return this;
+        }
+        
     }
 
     public void StepOn()
@@ -30,12 +39,12 @@ public class Platform : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _modificator.FixedUpdate();
+        _decorator?.FixedUpdate();
     }
 
     private void OnDestroy()
     {
-        _modificator.Destroy();
+        _decorator?.Destroy();
     }
 
 }

@@ -8,26 +8,30 @@ public class PlatformSpawner
     public Platform Spawn(IPlatformFactory factory, PlatformType type, PlatformDestroyer destroyer)
     {
         var platform = factory.Spawn();
-        platform.Modify(GetModificatorByType(type, platform, destroyer));
+        DecoratePlatform(type, platform, destroyer);
         PlatformSpawned?.Invoke(platform);
         return platform;
     }
 
 
-    private PlatformModificator GetModificatorByType(PlatformType type, Platform platform, PlatformDestroyer destroyer)
+    private void DecoratePlatform(PlatformType type, Platform platform, PlatformDestroyer destroyer)
     {
         switch (type)
         {
             case PlatformType.Moving:
-                return new Moving(platform);
-            case PlatformType.Static:
-                return new Static(platform);
-            case PlatformType.StaticDisappearing:
-                return new StaticDisappearing(platform, destroyer);
+                platform.Decorate(new Moving(platform));
+                return;
             case PlatformType.MovingDisappearing:
-                return new MovingDisappearing(platform, destroyer);
-            default: throw new Exception($"No modificator type such {type}");
+                platform.Decorate(new Moving(platform)).Decorate(new Disappearing(platform, destroyer));
+                return;
+            case PlatformType.StaticDisappearing:
+                platform.Decorate(new Disappearing(platform, destroyer));
+                return;
+            case PlatformType.Static:
+                return;
+            default: throw new Exception($"No decorator type such {type}");
         }
+
     }
 
 }
