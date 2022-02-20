@@ -5,12 +5,17 @@
 public class Player : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    [SerializeField] private Vector2 _jumpForce;
-    [SerializeField] private Vector2 _fallVelocity;
+    [SerializeField] private Vector2 _jumpVelocity;
+
+    [Header("Every fixed update add this amount to player velocity.y")]
+    [SerializeField] private float _fallVelocityMultiplier;
+
     private Rigidbody2D _body;
     private Collider2D _collider;
     private PlayerPhysics _physics;
     private BorderTeleporter _borderTeleporter;
+
+    private float _fallVelocity = 0;
 
 
     private void Awake()
@@ -35,12 +40,13 @@ public class Player : MonoBehaviour
         }
 
         _borderTeleporter.Update();
-        
+                
     }
 
     private void FixedUpdate()
     {
         UpdateCollider();
+        ApplyFall();
     }
 
     private void OnDestroy()
@@ -56,11 +62,13 @@ public class Player : MonoBehaviour
             Jump();
             platform.StepOn();
         }
+
     }
 
     private void Jump()
     {
-        _physics.SetVelocity(VelocityAxis.Y, _jumpForce);
+        _physics.SetVelocity(VelocityAxis.Y, _jumpVelocity);
+        _fallVelocity = 0;
     }
 
 
@@ -75,4 +83,11 @@ public class Player : MonoBehaviour
     {
         _physics.SetVelocity(VelocityAxis.X, new Vector2(direction * _speed, 0));
     }
+
+    private void ApplyFall()
+    {
+        _fallVelocity += _fallVelocityMultiplier;
+        _physics.IncreaseVelocity(VelocityAxis.Y, _fallVelocity);
+    }
+
 }

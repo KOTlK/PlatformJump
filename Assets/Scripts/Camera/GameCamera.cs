@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using Extensions;
 
 public class GameCamera
@@ -11,8 +6,9 @@ public class GameCamera
     private readonly Transform _target;
     private readonly Camera _camera = Camera.main;
 
-    private float _movementSpeed = 2f;
+    private float _defaultMovementSpeed = 4f;
     private float _maxTargetDistanceFromUpperBorder;
+
 
     public GameCamera(Transform target)
     {
@@ -23,20 +19,19 @@ public class GameCamera
     public void FixedUpdate()
     {
         MoveUp();
-        MoveToTarget();
     }
 
     private void MoveUp()
     {
-        _camera.transform.position += new Vector3(0, _movementSpeed * Time.deltaTime);
+        _camera.transform.position += new Vector3(0, GetSpeed() * Time.deltaTime);
     }
 
-    private void MoveToTarget()
+    private float GetSpeed()
     {
-        if (_target.position.y < (_camera.GetMaxBounds().y - _maxTargetDistanceFromUpperBorder)) return;
-        var position = _camera.transform.position;
-        position.y = _target.position.y;
+        if (_target.position.y < (_camera.GetMaxBounds().y - _maxTargetDistanceFromUpperBorder)) return _defaultMovementSpeed;
+        var distance = (_target.position - _camera.transform.position).sqrMagnitude;
+        return _defaultMovementSpeed + distance / 50;
 
-        _camera.transform.position = Vector3.Lerp(_camera.transform.position, position, 0.02f);
     }
+
 }

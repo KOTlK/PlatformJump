@@ -32,6 +32,23 @@ public class PlayerPhysics
             default: throw new Exception($"Can't find axis {axis}");
         }
     }
+
+    public void IncreaseVelocity(VelocityAxis axis, float amount)
+    {
+        var velocity = _playerBody.velocity;
+        switch (axis)
+        {
+            case VelocityAxis.X:
+                velocity.x += amount;
+                _playerBody.velocity = velocity;
+                return;
+            case VelocityAxis.Y:
+                velocity.y += amount;
+                _playerBody.velocity = velocity;
+                return;
+            default : throw new Exception($"Can't find axis named {axis}");
+        }
+    }
 }
 
 

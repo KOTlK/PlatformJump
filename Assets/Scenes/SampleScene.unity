@@ -439,8 +439,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 15
-  _jumpForce: {x: 0, y: 13}
-  _fallVelocity: {x: 0, y: -13}
+  _jumpVelocity: {x: 0, y: 20}
+  _fallVelocityMultiplier: -0.01
 --- !u!212 &2048818446
 SpriteRenderer:
   m_ObjectHideFlags: 0
