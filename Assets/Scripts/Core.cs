@@ -17,6 +17,7 @@ public class Core : MonoBehaviour
     private PlatformLifeCycle _platformLifeCycle;
     private GameCamera _gameCamera;
     private LowerBorderTouchAwaiter _lowerBorderTouchAwaiter;
+    private PlayerInput _playerInput;
 
     private void Awake()
     {
@@ -25,6 +26,7 @@ public class Core : MonoBehaviour
         _platformLifeCycle.StartSpawning();
         _platformLifeCycle.SpawnStartPlatforms(10);
         _gameCamera = new GameCamera(_player.transform);
+        _playerInput = new PlayerInput(_player);
     }
 
     private void OnDestroy()
@@ -37,6 +39,7 @@ public class Core : MonoBehaviour
     private void Update()
     {
         _platformLifeCycle.Update();
+        _playerInput.Update();
     }
 
     private void FixedUpdate()

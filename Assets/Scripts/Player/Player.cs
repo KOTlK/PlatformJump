@@ -18,6 +18,16 @@ public class Player : MonoBehaviour
     private float _fallVelocity = 0;
 
 
+    public void Move(float direction)
+    {
+        _physics.SetVelocity(VelocityAxis.X, new Vector2(direction * _speed, 0));
+    }
+    public void Jump()
+    {
+        _physics.SetVelocity(VelocityAxis.Y, _jumpVelocity);
+        _fallVelocity = 0;
+    }
+
     private void Awake()
     {
         _body = GetComponent<Rigidbody2D>();
@@ -29,19 +39,11 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        var horizontal = Input.GetAxis("Horizontal");
-        if (horizontal != 0)
-        {
-            Move(horizontal);
-        }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            Jump();
-        }
-
         _borderTeleporter.Update();
                 
     }
+
+    
 
     private void FixedUpdate()
     {
@@ -65,12 +67,6 @@ public class Player : MonoBehaviour
 
     }
 
-    private void Jump()
-    {
-        _physics.SetVelocity(VelocityAxis.Y, _jumpVelocity);
-        _fallVelocity = 0;
-    }
-
 
     private void UpdateCollider()
     {
@@ -79,10 +75,6 @@ public class Player : MonoBehaviour
         _collider.enabled = !_collider.enabled;
     }
 
-    private void Move(float direction)
-    {
-        _physics.SetVelocity(VelocityAxis.X, new Vector2(direction * _speed, 0));
-    }
 
     private void ApplyFall()
     {
