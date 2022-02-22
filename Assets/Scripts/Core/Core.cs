@@ -1,53 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Core : MonoBehaviour
+public class Core
 {
-    [SerializeField] private Platform _platformPrefab;
-    [SerializeField] private Transform _platformParent;
-    [SerializeField] private LowerBorder _lowerBorder;
-    [SerializeField] private PlatformSpawnChances _spawnChances;
-    [SerializeField] private Player _player;
-
-
     private PlatformLifeCycle _platformLifeCycle;
     private GameCamera _gameCamera;
     private LowerBorderTouchAwaiter _lowerBorderTouchAwaiter;
     private PlayerInput _playerInput;
 
-    private void Awake()
+
+    public void Init(CoreInitialData initialData)
     {
-        _lowerBorderTouchAwaiter = new LowerBorderTouchAwaiter(_lowerBorder);
-        _platformLifeCycle = new PlatformLifeCycle(_platformPrefab, _platformParent, _lowerBorderTouchAwaiter, _spawnChances);
+        _lowerBorderTouchAwaiter = new LowerBorderTouchAwaiter(initialData.LowerBorder);
+        _platformLifeCycle = new PlatformLifeCycle(initialData.PlatformPrefab, initialData.PlatformParent, _lowerBorderTouchAwaiter, initialData.SpawnChances);
         _platformLifeCycle.StartSpawning();
         _platformLifeCycle.SpawnStartPlatforms(10);
-        _gameCamera = new GameCamera(_player.transform);
-        _playerInput = new PlayerInput(_player);
-        _playerInput.Init(new KeyboardInput());
+        _gameCamera = new GameCamera(initialData.Player.transform);
+        _playerInput = new PlayerInput(initialData.Player);
+        _playerInput.Init(DeviceDetection.GetInput());
+        Debug.Log(Application.platform);
     }
 
-    private void OnDestroy()
+    public void OnDestroy()
     {
         _platformLifeCycle.StopSpawning();
         _platformLifeCycle.Destroy();
     }
 
 
-    private void Update()
+    public void Update()
     {
         _platformLifeCycle.Update();
         _playerInput.Update();
     }
 
-    private void FixedUpdate()
+    public void FixedUpdate()
     {
         _gameCamera.FixedUpdate();
     }
 
 
 
+}
+
+
+public struct CoreInitialData
+{
+    public Platform PlatformPrefab;
+    public Transform PlatformParent;
+    public LowerBorder LowerBorder;
+    public PlatformSpawnChances SpawnChances;
+    public Player Player;
 }

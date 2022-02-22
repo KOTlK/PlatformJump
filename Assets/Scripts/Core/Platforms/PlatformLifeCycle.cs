@@ -37,6 +37,16 @@ public class PlatformLifeCycle
         _borderTouchAwaiter.Destroy();
     }
 
+    public void DestroyAllPlatforms()
+    {
+        StopSpawning();
+        foreach(var platform in _spawnedPlatforms)
+        {
+            _destroyer.DestroyPlatform(platform);
+            _spawnedPlatforms.Remove(platform);
+        }
+    }
+
     public void SpawnStartPlatforms(int amount)
     {
         for (int i = 0; i < amount; i++)
