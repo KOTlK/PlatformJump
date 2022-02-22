@@ -163,7 +163,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 432511138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5927433bb9c697245bce228a0f46e9e8, type: 3}
+  m_Script: {fileID: 11500000, guid: cf5e85474f8dbc14e9ec238e335f59ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _platformPrefab: {fileID: 1559454485928473051, guid: cb2576c16ad2b414c8a6adfb3c356528, type: 3}
@@ -438,7 +438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae9f6d142e9c7b46bf0050cf9e1dcdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 15
+  _speed: 25
   _jumpVelocity: {x: 0, y: 20}
   _fallVelocityMultiplier: -0.01
 --- !u!212 &2048818446

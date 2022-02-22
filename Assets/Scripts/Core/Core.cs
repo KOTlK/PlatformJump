@@ -27,6 +27,7 @@ public class Core : MonoBehaviour
         _platformLifeCycle.SpawnStartPlatforms(10);
         _gameCamera = new GameCamera(_player.transform);
         _playerInput = new PlayerInput(_player);
+        _playerInput.Init(new KeyboardInput());
     }
 
     private void OnDestroy()
