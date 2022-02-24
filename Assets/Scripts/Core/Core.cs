@@ -17,7 +17,6 @@ public class Core
         _gameCamera = new GameCamera(initialData.Player.transform);
         _playerInput = new PlayerInput(initialData.Player);
         _playerInput.Init(DeviceDetection.GetInput());
-        Debug.Log(Application.platform);
     }
 
     public void OnDestroy()
