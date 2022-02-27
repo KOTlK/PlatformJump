@@ -9,35 +9,36 @@ public class GameSession : MonoBehaviour
 {
     private Core _core;
     private GameContext _gameContext;
+
+    private Player _player;
+
+    private bool _touched = false;
     private ResourceManager ResourceManager => _gameContext.ResourceManager;
+
 
     private void Awake()
     {
         _gameContext = new GameContext();
-        var player = ResourceManager.InstantiateResource<Player>("player");
+        _player = ResourceManager.InstantiateResource<Player>("player");
         var lowerBorder = ResourceManager.InstantiateResource<LowerBorder>("lowerborder");
         var spawnChances = ResourceManager.TryLoadResource<PlatformSpawnChances>("spawnchances");
 
         var coreInitialData = new CoreInitialData { LowerBorder = lowerBorder,
-                                                 Player = player,
+                                                 Player = _player,
                                                  SpawnChances = spawnChances };
 
         _core = new Core();
         _core.Init(coreInitialData);
+
+
+        _gameContext.GamePause.Pause();
     }
 
 
     private void Update()
     {
         _core.Update();
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            _gameContext.GamePause.Pause();
-        }
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            _gameContext.GamePause.UnPause();
-        }
+        TryGetFirstTouch();
     }
 
     private void FixedUpdate()
@@ -50,5 +51,14 @@ public class GameSession : MonoBehaviour
         _core.OnDestroy();
     }
 
-
+    private void TryGetFirstTouch()
+    {
+        if (_touched) return;
+        if (Input.GetMouseButtonUp(0))
+        {
+            _touched = true;
+            _gameContext.GamePause.UnPause();
+            _player.Jump();
+        }
+    }
 }

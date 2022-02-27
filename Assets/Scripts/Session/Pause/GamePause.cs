@@ -4,6 +4,8 @@ public class GamePause : IPausable
 {
     private List<IPausable> _pausables = new List<IPausable>();
 
+    public bool IsPaused { get; private set; } = false;
+
     public void Register(IPausable pausable)
     {
         _pausables.Add(pausable);
@@ -17,6 +19,8 @@ public class GamePause : IPausable
         {
             pausable.Pause();
         }
+
+        IsPaused = true;
     }
 
     public void UnPause()
@@ -26,5 +30,7 @@ public class GamePause : IPausable
         {
             pausable.UnPause();
         }
+
+        IsPaused = false;
     }
 }
