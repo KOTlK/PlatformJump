@@ -2,7 +2,7 @@
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IPausable
 {
     [SerializeField] private float _speed;
     [SerializeField] private Vector2 _jumpVelocity;
@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     private BorderTeleporter _borderTeleporter;
 
     private float _fallVelocity = 0;
-
+    private bool _isPaused;
 
     public void Move(float direction)
     {
@@ -28,8 +28,36 @@ public class Player : MonoBehaviour
         _fallVelocity = 0;
     }
 
+    public void Pause()
+    {
+        _isPaused = true;
+        _body.simulated = false;
+    }
+
+    public void UnPause()
+    {
+        _isPaused = false;
+        _body.simulated = true;
+    }
+
+    private void UpdateCollider()
+    {
+        if (_physics.Velocity.y > 0 && _collider.enabled == false) return;
+        if (_physics.Velocity.y <= 0 && _collider.enabled) return;
+        _collider.enabled = !_collider.enabled;
+    }
+
+
+    private void ApplyFall()
+    {
+        _fallVelocity += _fallVelocityMultiplier;
+        _physics.IncreaseVelocity(VelocityAxis.Y, _fallVelocity);
+    }
+
     private void Awake()
     {
+        _isPaused = false;
+        GameContext.Instance.GamePause.Register(this);
         _body = GetComponent<Rigidbody2D>();
         _collider = GetComponent<Collider2D>();
         _physics = new PlayerPhysics(_body);
@@ -40,13 +68,11 @@ public class Player : MonoBehaviour
     private void Update()
     {
         _borderTeleporter.Update();
-                
     }
-
-    
 
     private void FixedUpdate()
     {
+        if (_isPaused) return;
         UpdateCollider();
         ApplyFall();
     }
@@ -68,18 +94,5 @@ public class Player : MonoBehaviour
     }
 
 
-    private void UpdateCollider()
-    {
-        if (_physics.Velocity.y > 0 && _collider.enabled == false) return;
-        if (_physics.Velocity.y <= 0 && _collider.enabled) return;
-        _collider.enabled = !_collider.enabled;
-    }
-
-
-    private void ApplyFall()
-    {
-        _fallVelocity += _fallVelocityMultiplier;
-        _physics.IncreaseVelocity(VelocityAxis.Y, _fallVelocity);
-    }
-
+    
 }

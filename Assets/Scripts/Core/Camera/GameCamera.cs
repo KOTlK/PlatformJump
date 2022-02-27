@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Extensions;
 
-public class GameCamera
+public class GameCamera : IPausable
 {
     private readonly Transform _target;
     private readonly Camera _camera = Camera.main;
@@ -9,15 +9,18 @@ public class GameCamera
     private float _defaultMovementSpeed = 4f;
     private float _maxTargetDistanceFromUpperBorder;
 
+    private bool _isPaused = false;
 
     public GameCamera(Transform target)
     {
         _target = target;
         _maxTargetDistanceFromUpperBorder = (_camera.GetMaxBounds().y - _camera.GetMinBounds().y) / 4;
+        GameContext.Instance.GamePause.Register(this);
     }
 
     public void FixedUpdate()
     {
+        if (_isPaused) return;
         MoveUp();
     }
 
@@ -34,4 +37,13 @@ public class GameCamera
 
     }
 
+    public void Pause()
+    {
+        _isPaused = true;
+    }
+
+    public void UnPause()
+    {
+        _isPaused = false;
+    }
 }

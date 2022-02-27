@@ -7,24 +7,20 @@ using UnityEngine;
 
 public class GameSession : MonoBehaviour
 {
-    [SerializeField] private PlatformSpawnChances _spawnChances;
-    [SerializeField] private Platform _platformPrefab;
-    [SerializeField] private Transform _platformParent;
-
     private Core _core;
     private GameContext _gameContext;
+    private ResourceManager ResourceManager => _gameContext.ResourceManager;
 
     private void Awake()
     {
         _gameContext = new GameContext();
-        var player = _gameContext.ResourceManager.InstantiateResource<Player>("player");
-        var lowerBorder = _gameContext.ResourceManager.InstantiateResource<LowerBorder>("lowerborder");
+        var player = ResourceManager.InstantiateResource<Player>("player");
+        var lowerBorder = ResourceManager.InstantiateResource<LowerBorder>("lowerborder");
+        var spawnChances = ResourceManager.TryLoadResource<PlatformSpawnChances>("spawnchances");
 
-        var coreInitialData = new CoreInitialData { LowerBorder = lowerBorder, 
-                                                 PlatformParent = _platformParent, 
-                                                 PlatformPrefab = _platformPrefab,
+        var coreInitialData = new CoreInitialData { LowerBorder = lowerBorder,
                                                  Player = player,
-                                                 SpawnChances = _spawnChances };
+                                                 SpawnChances = spawnChances };
 
         _core = new Core();
         _core.Init(coreInitialData);
@@ -34,6 +30,14 @@ public class GameSession : MonoBehaviour
     private void Update()
     {
         _core.Update();
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _gameContext.GamePause.Pause();
+        }
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            _gameContext.GamePause.UnPause();
+        }
     }
 
     private void FixedUpdate()

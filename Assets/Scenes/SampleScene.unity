@@ -166,41 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c85f9b3c16f6d8248ab49cb25992c902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lowerBorderPrefab: {fileID: 2023689677470508364, guid: 02eb1df043f326c46a3b8fc4788dd2ed, type: 3}
-  _playerPrefab: {fileID: 7681439270560608266, guid: 228c15ec644299c479e7d97dcab4f8d4, type: 3}
-  _spawnChances: {fileID: 11400000, guid: 9a3db90586d74d942a17aa5cfb97b49e, type: 2}
-  _platformPrefab: {fileID: 1559454485928473051, guid: cb2576c16ad2b414c8a6adfb3c356528, type: 3}
-  _platformParent: {fileID: 511497139}
---- !u!1 &511497138
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 511497139}
-  m_Layer: 0
-  m_Name: Platforms
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &511497139
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 511497138}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

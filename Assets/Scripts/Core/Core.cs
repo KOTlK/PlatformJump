@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public class Core
+﻿public class Core
 {
     private PlatformLifeCycle _platformLifeCycle;
     private GameCamera _gameCamera;
@@ -11,7 +9,7 @@ public class Core
     public void Init(CoreInitialData initialData)
     {
         _lowerBorderTouchAwaiter = new LowerBorderTouchAwaiter(initialData.LowerBorder);
-        _platformLifeCycle = new PlatformLifeCycle(initialData.PlatformPrefab, initialData.PlatformParent, _lowerBorderTouchAwaiter, initialData.SpawnChances);
+        _platformLifeCycle = new PlatformLifeCycle(_lowerBorderTouchAwaiter, initialData.SpawnChances);
         _platformLifeCycle.StartSpawning();
         _platformLifeCycle.SpawnStartPlatforms(10);
         _gameCamera = new GameCamera(initialData.Player.transform);
@@ -44,8 +42,6 @@ public class Core
 
 public struct CoreInitialData
 {
-    public Platform PlatformPrefab;
-    public Transform PlatformParent;
     public LowerBorder LowerBorder;
     public PlatformSpawnChances SpawnChances;
     public Player Player;

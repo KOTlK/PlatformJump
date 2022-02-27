@@ -22,6 +22,13 @@ public class ResourceManager
         var component = MonoBehaviour.Instantiate(resource).GetComponent<T>();
         return component;
     }
+
+    public T InstantiateResource<T>(string name, Transform parent)
+    {
+        var resource = TryLoadResource<GameObject>(name);
+        var component = MonoBehaviour.Instantiate(resource, parent).GetComponent<T>();
+        return component;
+    }
 }
 
 

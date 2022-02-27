@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Moving : PlatformDecorator
+public class Moving : PlatformDecorator, IPausable
 {
     private float _speed;
     private bool _movementOver;
@@ -8,6 +8,7 @@ public class Moving : PlatformDecorator
     private Movement _movement;
     private const float _nearRange = 0.5f;
 
+    private bool _isPaused = false;
     public Moving(Platform platform) : base(platform)
     {
     }
@@ -18,10 +19,12 @@ public class Moving : PlatformDecorator
         _movement = new Movement(Platform.transform, _speed);
         _movementDestination = GetRandomDestination();
         _movementOver = false;
+        GameContext.Instance.GamePause.Register(this);
     }
 
     public override void FixedUpdate()
     {
+        if (_isPaused) return;
         Move();
         Decorator?.FixedUpdate();
     }
@@ -63,5 +66,15 @@ public class Moving : PlatformDecorator
         {
             return false;
         }
+    }
+
+    public void Pause()
+    {
+        _isPaused = true;
+    }
+
+    public void UnPause()
+    {
+        _isPaused = false;
     }
 }

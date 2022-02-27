@@ -11,7 +11,7 @@ public class LowerBorderTouchAwaiter
     {
         _border = border;
         ApplyBorderScale();
-        _border.BorderTouched += Invoke;
+        _border.BorderTouched += InvokeTouch;
     }
 
     public void FixedUpdate()
@@ -21,7 +21,7 @@ public class LowerBorderTouchAwaiter
 
     public void Destroy()
     {
-        _border.BorderTouched -= Invoke;
+        _border.BorderTouched -= InvokeTouch;
     }
 
     private void ApplyBorderScale()
@@ -39,7 +39,7 @@ public class LowerBorderTouchAwaiter
         _border.transform.position = position;
     }
 
-    private void Invoke(Platform platform)
+    private void InvokeTouch(Platform platform)
     {
         BorderTouched?.Invoke(platform);
     }

@@ -2,18 +2,20 @@
 
 public class DefaultPlatformFactory : IPlatformFactory
 {
-    private readonly Platform _prefab;
-    private readonly Transform _parent;
+    private Transform _parent;
 
-    public DefaultPlatformFactory(Platform prefab, Transform parent)
-    {
-        _prefab = prefab;
-        _parent = parent;
-    }
+    private ResourceManager ResourceManager => GameContext.Instance.ResourceManager;
+
 
     public Platform Spawn()
     {
-        var obj = MonoBehaviour.Instantiate(_prefab, _parent);
+        if (_parent == null)
+        {
+            _parent = ResourceManager.InstantiateResource<Transform>("platforms");
+        }
+
+        var obj = ResourceManager.InstantiateResource<Platform>("platform", _parent);
+
         return obj;
     }
 }
