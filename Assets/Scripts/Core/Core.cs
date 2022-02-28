@@ -3,8 +3,8 @@
     private PlatformLifeCycle _platformLifeCycle;
     private GameCamera _gameCamera;
     private LowerBorderTouchAwaiter _lowerBorderTouchAwaiter;
-    private PlayerInput _playerInput;
-
+    private BorderTeleporter _borderTeleporter;
+    private PlayerDeath _playerDeath;
 
     public void Init(CoreInitialData initialData)
     {
@@ -13,21 +13,15 @@
         _platformLifeCycle.StartSpawning();
         _platformLifeCycle.SpawnStartPlatforms(10);
         _gameCamera = new GameCamera(initialData.Player.transform);
-        _playerInput = new PlayerInput(initialData.Player);
-        _playerInput.Init(DeviceDetection.GetInput());
-    }
-
-    public void OnDestroy()
-    {
-        _platformLifeCycle.StopSpawning();
-        _platformLifeCycle.Destroy();
+        _borderTeleporter = new BorderTeleporter(initialData.Player);
+        _playerDeath = new PlayerDeath(initialData.LowerBorder);
     }
 
 
     public void Update()
     {
         _platformLifeCycle.Update();
-        _playerInput.Update();
+        _borderTeleporter.Update();
     }
 
     public void FixedUpdate()
@@ -35,7 +29,12 @@
         _gameCamera.FixedUpdate();
     }
 
-
+    public void OnDestroy()
+    {
+        _platformLifeCycle.StopSpawning();
+        _platformLifeCycle.Destroy();
+        _borderTeleporter.OnDestroy();
+    }
 
 }
 

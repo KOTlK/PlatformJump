@@ -4,11 +4,13 @@ public class MobileInput : IPlayerInput
 {
     public event Action<float> HorizontalAxisChanged;
     public event Action DebugButtonPressed;
+    public event Action ScreenTouched;
 
     public void UpdateInput()
     {
         Move();
         Debug();
+        WaitForTouch();
     }
 
     private void Move()
@@ -17,11 +19,16 @@ public class MobileInput : IPlayerInput
         HorizontalAxisChanged?.Invoke(h);
     }
 
-    private void Debug()
+    private void WaitForTouch()
     {
         if (Input.touchCount > 0)
         {
-            DebugButtonPressed?.Invoke();
+            if (Input.touches[0].phase == TouchPhase.Ended) ScreenTouched?.Invoke();
         }
+    }
+
+    private void Debug()
+    {
+        if (Input.touchCount > 0) DebugButtonPressed?.Invoke();
     }
 }

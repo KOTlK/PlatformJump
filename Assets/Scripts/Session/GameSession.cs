@@ -11,8 +11,8 @@ public class GameSession : MonoBehaviour
     private GameContext _gameContext;
 
     private Player _player;
-
-    private bool _touched = false;
+    private FirstTouchAwaiter _firstTouchAwaiter;
+    private UI _ui;
     private ResourceManager ResourceManager => _gameContext.ResourceManager;
 
 
@@ -23,6 +23,9 @@ public class GameSession : MonoBehaviour
         var lowerBorder = ResourceManager.InstantiateResource<LowerBorder>("lowerborder");
         var spawnChances = ResourceManager.TryLoadResource<PlatformSpawnChances>("spawnchances");
 
+        _firstTouchAwaiter = new FirstTouchAwaiter();
+        _firstTouchAwaiter.Init();
+
         var coreInitialData = new CoreInitialData { LowerBorder = lowerBorder,
                                                  Player = _player,
                                                  SpawnChances = spawnChances };
@@ -30,15 +33,24 @@ public class GameSession : MonoBehaviour
         _core = new Core();
         _core.Init(coreInitialData);
 
+        
+
+        _ui = new UI();
+        _ui.ShowStartUI();
+
+        PlayerDeath.Died += _gameContext.GamePause.Pause;
+        PlayerDeath.Died += ShowDeathUI;
+        FirstTouchAwaiter.Touched += _gameContext.GamePause.UnPause;
 
         _gameContext.GamePause.Pause();
+
     }
 
 
     private void Update()
     {
         _core.Update();
-        TryGetFirstTouch();
+        _gameContext.PlayerInput.UpdateInput();
     }
 
     private void FixedUpdate()
@@ -49,16 +61,14 @@ public class GameSession : MonoBehaviour
     private void OnDestroy()
     {
         _core.OnDestroy();
+        PlayerDeath.Died -= _gameContext.GamePause.Pause;
+        PlayerDeath.Died -= ShowDeathUI;
+        FirstTouchAwaiter.Touched -= _gameContext.GamePause.UnPause;
     }
 
-    private void TryGetFirstTouch()
+    private void ShowDeathUI()
     {
-        if (_touched) return;
-        if (Input.GetMouseButtonUp(0))
-        {
-            _touched = true;
-            _gameContext.GamePause.UnPause();
-            _player.Jump();
-        }
+        var ui = _gameContext.ResourceManager.InstantiateResource<LoseScreen>("losescreen");
+        ui.UpdateView(new LoseScreenData { BestScore = 100, Score = 100 });
     }
 }

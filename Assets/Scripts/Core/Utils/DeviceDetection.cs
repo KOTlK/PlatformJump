@@ -2,17 +2,21 @@
 
 public static class DeviceDetection
 {
-    public static IPlayerInput GetInput()
+    public static IPlayerInput InputType
     {
-        switch (Application.platform)
+        get
         {
-            case RuntimePlatform.Android:
-                return new MobileInput();
-            case RuntimePlatform.WindowsEditor:
-                return new KeyboardInput();
-            case RuntimePlatform.WindowsPlayer:
-                return new KeyboardInput();
-            default: return new KeyboardInput();
+            switch (Application.platform)
+            {
+                case RuntimePlatform.Android:
+                    return new MobileInput();
+                case RuntimePlatform.WindowsEditor:
+                    return new KeyboardInput();
+                case RuntimePlatform.WindowsPlayer:
+                    return new KeyboardInput();
+                default: return new KeyboardInput();
+            }
         }
     }
+
 }

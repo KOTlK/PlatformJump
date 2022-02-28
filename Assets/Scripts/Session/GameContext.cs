@@ -6,21 +6,21 @@ public class GameContext
 
     private readonly ResourceManager _resourceManager;
     private readonly GamePause _gamePause;
+    private IPlayerInput _playerInput;
 
     public ResourceManager ResourceManager => _resourceManager;
     public GamePause GamePause => _gamePause;
+    public IPlayerInput PlayerInput => _playerInput;
 
     public GameContext()
     {
         if (Instance == null)
         {
             Instance = this;
-        } else
-        {
-            throw new Exception($"Can't be more than one object of type GameContext");
         }
 
         _resourceManager = new ResourceManager();
         _gamePause = new GamePause();
+        _playerInput = DeviceDetection.InputType;
     }
 }

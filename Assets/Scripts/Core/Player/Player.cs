@@ -13,16 +13,17 @@ public class Player : MonoBehaviour, IPausable
     private Rigidbody2D _body;
     private Collider2D _collider;
     private PlayerPhysics _physics;
-    private BorderTeleporter _borderTeleporter;
 
     private float _fallVelocity = 0;
     private bool _isPaused;
+
+    private IPlayerInput _playerInput => GameContext.Instance.PlayerInput;
 
     public void Move(float direction)
     {
         _physics.SetVelocity(VelocityAxis.X, new Vector2(direction * _speed, 0));
     }
-    public void Jump()
+    private void Jump()
     {
         _physics.SetVelocity(VelocityAxis.Y, _jumpVelocity);
         _fallVelocity = 0;
@@ -54,6 +55,11 @@ public class Player : MonoBehaviour, IPausable
         _physics.IncreaseVelocity(VelocityAxis.Y, _fallVelocity);
     }
 
+    public void Disable()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void Awake()
     {
         _isPaused = false;
@@ -61,14 +67,22 @@ public class Player : MonoBehaviour, IPausable
         _body = GetComponent<Rigidbody2D>();
         _collider = GetComponent<Collider2D>();
         _physics = new PlayerPhysics(_body);
-        _borderTeleporter = new BorderTeleporter(this);
     }
 
-
-    private void Update()
+    private void OnEnable()
     {
-        _borderTeleporter.Update();
+        FirstTouchAwaiter.Touched += Jump;
+        _playerInput.DebugButtonPressed += Jump;
+        _playerInput.HorizontalAxisChanged += Move;
     }
+
+    private void OnDisable()
+    {
+        FirstTouchAwaiter.Touched -= Jump;
+        _playerInput.DebugButtonPressed -= Jump;
+        _playerInput.HorizontalAxisChanged -= Move;
+    }
+
 
     private void FixedUpdate()
     {
@@ -77,10 +91,6 @@ public class Player : MonoBehaviour, IPausable
         ApplyFall();
     }
 
-    private void OnDestroy()
-    {
-        _borderTeleporter.OnDestroy();
-    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

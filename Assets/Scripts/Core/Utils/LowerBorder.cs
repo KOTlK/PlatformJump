@@ -4,7 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class LowerBorder : MonoBehaviour
 {
-    public event Action<Platform> BorderTouched;
+    public event Action<Platform> PlatformTouched;
+    public event Action<Player> PlayerTouched;
+
     private void Awake()
     {
         var collider = GetComponent<BoxCollider2D>();
@@ -15,7 +17,12 @@ public class LowerBorder : MonoBehaviour
     {
         if (collision.TryGetComponent<Platform>(out Platform platform))
         {
-            BorderTouched?.Invoke(platform);
+            PlatformTouched?.Invoke(platform);
+        }
+
+        if(collision.TryGetComponent<Player>(out Player player))
+        {
+            PlayerTouched?.Invoke(player);
         }
     }
 }

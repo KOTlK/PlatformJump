@@ -4,14 +4,16 @@ using UnityEngine;
 public class LowerBorderTouchAwaiter
 {
     public event Action<Platform> BorderTouched;
-    private LowerBorder _border;
-    private Camera _camera = Camera.main;
+    private readonly LowerBorder _border;
+    private readonly Camera _camera = Camera.main;
+
+    private const float BorderScaleOffset = 100;
 
     public LowerBorderTouchAwaiter(LowerBorder border)
     {
         _border = border;
         ApplyBorderScale();
-        _border.BorderTouched += InvokeTouch;
+        _border.PlatformTouched += InvokeTouch;
     }
 
     public void FixedUpdate()
@@ -21,13 +23,13 @@ public class LowerBorderTouchAwaiter
 
     public void Destroy()
     {
-        _border.BorderTouched -= InvokeTouch;
+        _border.PlatformTouched -= InvokeTouch;
     }
 
     private void ApplyBorderScale()
     {
         var scale = _border.transform.lossyScale;
-        scale.x = CameraBounds.Max.x + 10;
+        scale.x = CameraBounds.Max.x + BorderScaleOffset;
         _border.transform.localScale = scale;
     }
 
