@@ -16,7 +16,7 @@ public class LoseScreen : MonoBehaviour
 
     private void RestartGame()
     {
-        SceneManager.LoadScene(0); // doesn't work will be replaced
+        GameContext.Instance.Restart();
     }
 
     private void Awake()

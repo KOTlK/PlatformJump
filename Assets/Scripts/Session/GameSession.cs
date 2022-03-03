@@ -8,49 +8,61 @@ using UnityEngine;
 public class GameSession : MonoBehaviour
 {
     private Core _core;
-    private GameContext _gameContext;
+    private CameraBounds _cameraBounds;
 
     private Player _player;
     private FirstTouchAwaiter _firstTouchAwaiter;
-    private UI _ui;
-    private ResourceManager ResourceManager => _gameContext.ResourceManager;
 
 
-    private void Awake()
+    private ResourceManager ResourceManager => GameContext.Instance.ResourceManager;
+    private GameContext GameContext => GameContext.Instance;
+
+    private void Start()
     {
-        _gameContext = new GameContext();
-        _player = ResourceManager.InstantiateResource<Player>("player");
-        var lowerBorder = ResourceManager.InstantiateResource<LowerBorder>("lowerborder");
-        var spawnChances = ResourceManager.TryLoadResource<PlatformSpawnChances>("spawnchances");
+        GameContext.Init();
+        Init();
+        GameContext.Instance.Runtime.Pause();
+    }
+
+    private void Init()
+    {
+        _cameraBounds = new CameraBounds(Camera.main);
 
         _firstTouchAwaiter = new FirstTouchAwaiter();
         _firstTouchAwaiter.Init();
 
-        var coreInitialData = new CoreInitialData { LowerBorder = lowerBorder,
-                                                 Player = _player,
-                                                 SpawnChances = spawnChances };
+        LoadCore();
 
-        _core = new Core();
-        _core.Init(coreInitialData);
+        GameContext.UI.ShowStartUI();
 
-        
-
-        _ui = new UI();
-        _ui.ShowStartUI();
-
-        PlayerDeath.Died += _gameContext.GamePause.Pause;
+        PlayerDeath.Died += GameContext.Runtime.Pause;
         PlayerDeath.Died += ShowDeathUI;
-        FirstTouchAwaiter.Touched += _gameContext.GamePause.UnPause;
-
-        _gameContext.GamePause.Pause();
+        FirstTouchAwaiter.Touched += GameContext.Runtime.UnPause;
 
     }
 
 
+    private void LoadCore()
+    {
+        _player = ResourceManager.InstantiateResource<Player>("player");
+        var lowerBorder = ResourceManager.InstantiateResource<LowerBorder>("lowerborder");
+        var spawnChances = ResourceManager.TryLoadResource<PlatformSpawnChances>("spawnchances");
+
+        var coreInitialData = new CoreInitialData
+        {
+            LowerBorder = lowerBorder,
+            Player = _player,
+            SpawnChances = spawnChances
+        };
+
+        _core = new Core();
+        _core.Init(coreInitialData);
+    }
+
     private void Update()
     {
         _core.Update();
-        _gameContext.PlayerInput.UpdateInput();
+        GameContext.PlayerInput.UpdateInput();
     }
 
     private void FixedUpdate()
@@ -58,17 +70,10 @@ public class GameSession : MonoBehaviour
         _core.FixedUpdate();
     }
 
-    private void OnDestroy()
-    {
-        _core.OnDestroy();
-        PlayerDeath.Died -= _gameContext.GamePause.Pause;
-        PlayerDeath.Died -= ShowDeathUI;
-        FirstTouchAwaiter.Touched -= _gameContext.GamePause.UnPause;
-    }
 
     private void ShowDeathUI()
     {
-        var ui = _gameContext.ResourceManager.InstantiateResource<LoseScreen>("losescreen");
+        var ui = GameContext.ResourceManager.InstantiateResource<LoseScreen>("losescreen");
         ui.UpdateView(new LoseScreenData { BestScore = 100, Score = 100 });
     }
 }

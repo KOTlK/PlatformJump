@@ -1,26 +1,47 @@
 ﻿using System;
+using UnityEngine.SceneManagement;
+using UnityEngine;
 
-public class GameContext
+public class GameContext : MonoBehaviour
 {
     public static GameContext Instance { get; private set; }
 
-    private readonly ResourceManager _resourceManager;
-    private readonly GamePause _gamePause;
+    private ResourceManager _resourceManager;
     private IPlayerInput _playerInput;
+    private UI _ui;
+    private Runtime _runtime;
 
+    public UI UI => _ui;
     public ResourceManager ResourceManager => _resourceManager;
-    public GamePause GamePause => _gamePause;
+    public Runtime Runtime => _runtime;
     public IPlayerInput PlayerInput => _playerInput;
 
-    public GameContext()
+    public void Restart()
+    {
+        _runtime.Restart();
+        SceneManager.LoadScene(0);
+    }
+
+    public void Init()
+    {
+        _runtime = new Runtime();
+        _resourceManager = new ResourceManager();
+        _playerInput = DeviceDetection.InputType;
+        _ui = new UI();
+
+    }
+
+
+    private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(this);
+
         }
 
-        _resourceManager = new ResourceManager();
-        _gamePause = new GamePause();
-        _playerInput = DeviceDetection.InputType;
+
+        
     }
 }

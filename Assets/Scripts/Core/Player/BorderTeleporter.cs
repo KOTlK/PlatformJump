@@ -10,8 +10,8 @@ public enum BorderSide
 
 public class BorderTeleporter
 {
-    private Player _player;
-    private IBorderTouchAwaiter _touchAwaiter;
+    private readonly Player _player;
+    private readonly IBorderTouchAwaiter _touchAwaiter;
 
     public BorderTeleporter(Player player)
     {
@@ -25,10 +25,6 @@ public class BorderTeleporter
         _touchAwaiter.WaitTouch(_player.transform.position);
     }
 
-    public void OnDestroy()
-    {
-        _touchAwaiter.BorderTouched -= FlipSides;
-    }
 
     private void FlipSides(BorderSide side)
     {
@@ -49,5 +45,5 @@ public class BorderTeleporter
         }
     }
 
-
+    
 }

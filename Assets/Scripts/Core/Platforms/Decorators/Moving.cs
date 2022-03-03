@@ -19,7 +19,7 @@ public class Moving : PlatformDecorator, IPausable
         _movement = new Movement(Platform.transform, _speed);
         _movementDestination = GetRandomDestination();
         _movementOver = false;
-        GameContext.Instance.GamePause.Register(this);
+        GameContext.Instance.Runtime.GamePause.Register(this);
     }
 
     public override void FixedUpdate()

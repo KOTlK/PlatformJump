@@ -10,7 +10,10 @@ public class GamePause : IPausable
     {
         _pausables.Add(pausable);
     }
-
+    public void Clear()
+    {
+        _pausables.Clear();
+    }
 
     public void Pause()
     {

@@ -1,9 +1,15 @@
 ﻿using Extensions;
 using UnityEngine;
 
-public static class CameraBounds
+public class CameraBounds
 {
-    private static Camera _camera = Camera.main;
+    private static Camera _camera;
+
+    public CameraBounds(Camera camera)
+    {
+        _camera = camera;
+    }
+
     public static Vector2 Max
     {
         get { return _camera.GetMaxBounds();}

@@ -7,6 +7,7 @@ public class LowerBorder : MonoBehaviour
     public event Action<Platform> PlatformTouched;
     public event Action<Player> PlayerTouched;
 
+
     private void Awake()
     {
         var collider = GetComponent<BoxCollider2D>();

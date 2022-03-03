@@ -15,7 +15,6 @@ public class Player : MonoBehaviour, IPausable
     private PlayerPhysics _physics;
 
     private float _fallVelocity = 0;
-    private bool _isPaused;
 
     private IPlayerInput _playerInput => GameContext.Instance.PlayerInput;
 
@@ -23,22 +22,28 @@ public class Player : MonoBehaviour, IPausable
     {
         _physics.SetVelocity(VelocityAxis.X, new Vector2(direction * _speed, 0));
     }
-    private void Jump()
-    {
-        _physics.SetVelocity(VelocityAxis.Y, _jumpVelocity);
-        _fallVelocity = 0;
-    }
-
+    
     public void Pause()
     {
-        _isPaused = true;
         _body.simulated = false;
+        Debug.Log("Player Paused");
     }
 
     public void UnPause()
     {
-        _isPaused = false;
         _body.simulated = true;
+        Debug.Log("Player Unpaused");
+    }
+
+    public void Disable()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void Jump()
+    {
+        _physics.SetVelocity(VelocityAxis.Y, _jumpVelocity);
+        _fallVelocity = 0;
     }
 
     private void UpdateCollider()
@@ -55,42 +60,35 @@ public class Player : MonoBehaviour, IPausable
         _physics.IncreaseVelocity(VelocityAxis.Y, _fallVelocity);
     }
 
-    public void Disable()
-    {
-        gameObject.SetActive(false);
-    }
-
-    private void Awake()
-    {
-        _isPaused = false;
-        GameContext.Instance.GamePause.Register(this);
-        _body = GetComponent<Rigidbody2D>();
-        _collider = GetComponent<Collider2D>();
-        _physics = new PlayerPhysics(_body);
-    }
-
-    private void OnEnable()
+    private void Subscribe()
     {
         FirstTouchAwaiter.Touched += Jump;
         _playerInput.DebugButtonPressed += Jump;
         _playerInput.HorizontalAxisChanged += Move;
     }
 
-    private void OnDisable()
+    private void UnSubscribe()
     {
         FirstTouchAwaiter.Touched -= Jump;
         _playerInput.DebugButtonPressed -= Jump;
         _playerInput.HorizontalAxisChanged -= Move;
     }
 
+    private void Awake()
+    {
+        _body = GetComponent<Rigidbody2D>();
+        _collider = GetComponent<Collider2D>();
+        _physics = new PlayerPhysics(_body);
+        GameContext.Instance.Runtime.GamePause.Register(this);
+        Subscribe();
+    }
 
     private void FixedUpdate()
     {
-        if (_isPaused) return;
+        if (GameContext.Instance.Runtime.Status == SessionStatus.Paused) return;
         UpdateCollider();
         ApplyFall();
     }
-
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -103,6 +101,13 @@ public class Player : MonoBehaviour, IPausable
 
     }
 
+    private void OnDisable()
+    {
+        UnSubscribe();
+    }
 
-    
+    private void OnDestroy()
+    {
+        UnSubscribe();
+    }
 }

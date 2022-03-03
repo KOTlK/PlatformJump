@@ -32,20 +32,13 @@ public class PlatformLifeCycle
         _borderTouchAwaiter.FixedUpdate();
     }
 
-    public void Destroy()
+
+    public void Restart()
     {
         _borderTouchAwaiter.Destroy();
+        DestroyAllPlatforms();
     }
 
-    public void DestroyAllPlatforms()
-    {
-        StopSpawning();
-        foreach(var platform in _spawnedPlatforms)
-        {
-            _destroyer.DestroyPlatform(platform);
-            _spawnedPlatforms.Remove(platform);
-        }
-    }
 
     public void SpawnStartPlatforms(int amount)
     {
@@ -75,6 +68,15 @@ public class PlatformLifeCycle
         _isSpawning = false;
     }
 
+    private void DestroyAllPlatforms()
+    {
+        StopSpawning();
+        foreach (var platform in _spawnedPlatforms.ToArray())
+        {
+            _destroyer.DestroyPlatform(platform);
+        }
+        _spawnedPlatforms.Clear();
+    }
 
     private void RemoveFromList(Platform platform)
     {
@@ -124,4 +126,5 @@ public class PlatformLifeCycle
         return UnityEngine.Random.Range(CameraBounds.Min.x, CameraBounds.Max.x);
     }
 
+    
 }
