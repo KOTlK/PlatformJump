@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using UnityEngine;
 
@@ -31,8 +32,11 @@ public class ResourcesDataStorage : IResourcesDataStorage
     {
         Dictionary<string, string> resources = new Dictionary<string, string>();
 
-        var file = File.ReadAllLines("D:/Unity/Projects/PlatformJump/Test.json");
-        foreach (var line in file)
+        var textAsset = Resources.Load<TextAsset>("Text/ResourcePaths");
+
+        var text = textAsset.text.Split(new string[] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
+        
+        foreach (var line in text)
         {
             if (string.IsNullOrEmpty(line)) continue;
 
