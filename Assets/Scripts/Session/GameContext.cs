@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine.SceneManagement;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameContext : MonoBehaviour
 {
@@ -19,7 +17,6 @@ public class GameContext : MonoBehaviour
     public void Restart()
     {
         _runtime.Restart();
-        SceneManager.LoadScene(0);
     }
 
     public void Init()
