@@ -7,11 +7,9 @@
     private PlayerDeath _playerDeath;
 
 
-    private CoreInitialData _initialData;
 
     public void Init(CoreInitialData initialData)
     {
-        _initialData = initialData;
         _lowerBorderTouchAwaiter = new LowerBorderTouchAwaiter(initialData.LowerBorder);
         _platformLifeCycle = new PlatformLifeCycle(_lowerBorderTouchAwaiter, initialData.SpawnChances);
         _platformLifeCycle.StartSpawning();

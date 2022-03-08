@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae9f6d142e9c7b46bf0050cf9e1dcdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 25
+  _speed: 50
   _jumpVelocity: {x: 0, y: 20}
   _fallVelocityMultiplier: -0.01
 --- !u!50 &7681439270560608279
