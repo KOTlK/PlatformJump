@@ -38,6 +38,7 @@ public class GameSession : MonoBehaviour
     private void LoadCore()
     {
         _player = ResourceManager.InstantiateResource<Player>("player");
+        _player.transform.position = Vector2.zero;
         var lowerBorder = ResourceManager.InstantiateResource<LowerBorder>("lowerborder");
         var spawnChances = ResourceManager.TryLoadResource<PlatformSpawnChances>("spawnchances");
 
