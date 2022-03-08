@@ -26,13 +26,11 @@ public class Player : MonoBehaviour, IPausable
     public void Pause()
     {
         _body.simulated = false;
-        Debug.Log("Player Paused");
     }
 
     public void UnPause()
     {
         _body.simulated = true;
-        Debug.Log("Player Unpaused");
     }
 
     public void Disable()

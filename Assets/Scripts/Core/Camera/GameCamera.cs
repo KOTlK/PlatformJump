@@ -29,7 +29,7 @@ public class GameCamera
 
     public void FixedUpdate()
     {
-        if (_status == SessionStatus.Paused) return;
+        if (_status == SessionStatus.Paused || _status == SessionStatus.Ended) return;
         MoveUp();
     }
 

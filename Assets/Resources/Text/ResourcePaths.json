@@ -5,3 +5,4 @@
 {"Path":"Prefabs/Platforms","Name":"platforms"}
 {"Path":"UI/StartScreen","Name":"startui"}
 {"Path":"UI/LoseScreen","Name":"losescreen"}
+{"Path":"UI/InGameUI","Name":"ingameui"}

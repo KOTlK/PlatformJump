@@ -2,16 +2,28 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LoseScreen : MonoBehaviour
+public class LoseScreen : MonoBehaviour, IWindow
 {
     [SerializeField] private Text _currentScore;
     [SerializeField] private Text _bestScore;
     [SerializeField] private Button _restart;
 
-    public void UpdateView(LoseScreenData data)
+    private Score Score => GameContext.Instance.Score;
+
+    public void Show()
     {
-        _currentScore.text = $"Your score: {data.Score}";
-        _bestScore.text = $"Best score: {data.BestScore}";
+        gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void UpdateView()
+    {
+        _currentScore.text = $"Your score: {Score.GetCurrentScore()}";
+        _bestScore.text = $"Best score: {Score.TryLoadHighScore()}";
     }
 
     private void RestartGame()
@@ -22,17 +34,15 @@ public class LoseScreen : MonoBehaviour
     private void Awake()
     {
         _restart.onClick.AddListener(RestartGame);
+        GameContext.Instance.Runtime.GameEnded += UpdateView;
     }
 
     private void OnDestroy()
     {
         _restart.onClick.RemoveListener(RestartGame);
+        GameContext.Instance.Runtime.GameEnded -= UpdateView;
     }
+
+    
 }
 
-
-public struct LoseScreenData
-{
-    public int Score;
-    public int BestScore;
-}

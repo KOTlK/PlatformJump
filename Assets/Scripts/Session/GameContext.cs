@@ -8,11 +8,13 @@ public class GameContext : MonoBehaviour
     private IPlayerInput _playerInput;
     private UI _ui;
     private Runtime _runtime;
+    private Score _score;
 
     public UI UI => _ui;
     public ResourceManager ResourceManager => _resourceManager;
     public Runtime Runtime => _runtime;
     public IPlayerInput PlayerInput => _playerInput;
+    public Score Score => _score;
 
     public void Restart()
     {
@@ -24,6 +26,7 @@ public class GameContext : MonoBehaviour
         _runtime = new Runtime();
         _resourceManager = new ResourceManager();
         _playerInput = DeviceDetection.InputType;
+        _score = new Score();
         _ui = new UI();
 
     }

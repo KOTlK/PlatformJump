@@ -53,6 +53,7 @@ public class PlatformLifeCycle
         if (_isSpawning) return;
 
         _borderTouchAwaiter.BorderTouched += _destroyer.DestroyPlatform;
+        _borderTouchAwaiter.BorderTouched += delegate { GameContext.Instance.Score.IncreaseScore(); };
         _destroyer.PlatformDestroyed += delegate { SpawnRandomPlatform(); };
         _destroyer.PlatformDestroyed += RemoveFromList;
         _isSpawning = true;
@@ -63,6 +64,7 @@ public class PlatformLifeCycle
         if (_isSpawning == false) return;
 
         _borderTouchAwaiter.BorderTouched -= _destroyer.DestroyPlatform;
+        _borderTouchAwaiter.BorderTouched -= delegate { GameContext.Instance.Score.IncreaseScore(); };
         _destroyer.PlatformDestroyed -= delegate { SpawnRandomPlatform(); };
         _destroyer.PlatformDestroyed -= RemoveFromList;
         _isSpawning = false;

@@ -8,13 +8,14 @@ public class Runtime : IPausable
     public event Action Paused;
     public event Action UnPaused;
     public event Action Restarted;
+    public event Action GameEnded;
 
     public Runtime()
     {
         GamePause = new GamePause();
         StatusChanged += ChangeStatus;
-        StatusChanged += LogStatus;
     }
+
     public GamePause GamePause { get; private set; }
     public SessionStatus Status { get; private set; }
 
@@ -43,6 +44,13 @@ public class Runtime : IPausable
         Restarted?.Invoke();
     }
 
+    public void EndGame()
+    {
+        Pause();
+        GameEnded?.Invoke();
+        StatusChanged?.Invoke(SessionStatus.Ended);
+    }
+
     private void ChangeStatus(SessionStatus status)
     {
         Status = status;
@@ -61,4 +69,5 @@ public enum SessionStatus
     Paused,
     Restarted,
     Restarting,
+    Ended,
 }

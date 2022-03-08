@@ -30,8 +30,6 @@ public class GameSession : MonoBehaviour
 
         GameContext.UI.ShowStartUI();
 
-        PlayerDeath.Died += GameContext.Runtime.Pause;
-        PlayerDeath.Died += ShowDeathUI;
         FirstTouchAwaiter.Touched += GameContext.Runtime.UnPause;
 
     }
@@ -66,9 +64,4 @@ public class GameSession : MonoBehaviour
     }
 
 
-    private void ShowDeathUI()
-    {
-        var ui = GameContext.ResourceManager.InstantiateResource<LoseScreen>("losescreen");
-        ui.UpdateView(new LoseScreenData { BestScore = 100, Score = 100 });
-    }
 }

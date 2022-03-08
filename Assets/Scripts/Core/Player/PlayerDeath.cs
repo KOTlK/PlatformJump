@@ -2,8 +2,6 @@
 
 public class PlayerDeath
 {
-    public static event Action Died;
-
     private readonly LowerBorder _lowerBorder;
 
     public PlayerDeath(LowerBorder border)
@@ -15,7 +13,7 @@ public class PlayerDeath
     private void Die(Player player)
     {
         player.Disable();
-        Died?.Invoke();
+        GameContext.Instance.Runtime.EndGame();
         _lowerBorder.PlayerTouched -= Die;
     }
 }
