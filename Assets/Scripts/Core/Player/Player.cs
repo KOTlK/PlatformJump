@@ -61,14 +61,12 @@ public class Player : MonoBehaviour, IPausable
     private void Subscribe()
     {
         FirstTouchAwaiter.Touched += Jump;
-        _playerInput.DebugButtonPressed += Jump;
         _playerInput.HorizontalAxisChanged += Move;
     }
 
     private void UnSubscribe()
     {
         FirstTouchAwaiter.Touched -= Jump;
-        _playerInput.DebugButtonPressed -= Jump;
         _playerInput.HorizontalAxisChanged -= Move;
     }
 
